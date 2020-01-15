@@ -23,6 +23,10 @@ from requests.adapters import HTTPAdapter
 
 from .errors import ResponseError, EntryCreatedError, OperationCompletionError
 
+from requests.packages.urllib3.exceptions import InsecureRequestWarning
+
+requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.NullHandler())
 
@@ -249,7 +253,7 @@ class ReportPortalService(object):
 
     def get_project_settings(self):
         url = uri_join(self.base_url, "settings")
-        r = self.session.get(url=url, json={}, verify=self.verify_ssl)
+        r = self.session.get(url=url, json={}, verify=False)
         logger.debug("settings - Stack: %s", self.stack)
         return _get_json(r)
 
